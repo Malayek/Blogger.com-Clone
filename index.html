@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlogHub - Your Personal Blogging Platform</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .search-box {
+            position: relative;
+            max-width: 300px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.8rem 2.5rem 0.8rem 1rem;
+            border: none;
+            border-radius: 25px;
+            font-size: 0.9rem;
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 0.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #ff5252;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 3rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-title {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .categories {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        .category-tag {
+            padding: 0.5rem 1.5rem;
+            background: #f1f3f4;
+            color: #666;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .category-tag:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Blog Posts Grid */
+        .posts-grid {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .post-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            transition: all 0.4s;
+            cursor: pointer;
+            border: 1px solid #f1f3f4;
+        }
+
+        .post-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+        }
+
+        .post-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .post-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .post-meta h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+            line-height: 1.4;
+        }
+
+        .post-author {
+            color: #667eea;
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+        }
+
+        .post-date {
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        .post-excerpt {
+            color: #666;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .post-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid #f1f3f4;
+        }
+
+        .read-more {
+            color: #667eea;
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        .post-stats {
+            display: flex;
+            gap: 1.5rem;
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .sidebar-widget {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+        }
+
+        .widget-title {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .recent-posts {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .recent-post {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            border-radius: 15px;
+            transition: background 0.3s;
+        }
+
+        .recent-post:hover {
+            background: #f8f9fa;
+        }
+
+        .recent-thumb {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .recent-info h4 {
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+            line-height: 1.3;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 2% auto;
+            max-width: 900px;
+            max-height: 90vh;
+            border-radius: 20px;
+            overflow: hidden;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            padding: 2rem;
+            border-bottom: 1px solid #f1f3f4;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #999;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-modal:hover {
+            background: #f1f3f4;
+            color: #333;
+        }
+
+        .editor-container {
+            padding: 2rem;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .editor-toolbar {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .editor-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid #e0e0e0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .editor-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        #postEditor {
+            width: 100%;
+            min-height: 300px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 1.5rem;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .modal-actions {
+            padding: 2rem;
+            border-top: 1px solid #f1f3f4;
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        /* Post Modal */
+        .post-modal .post-content {
+            padding: 3rem 2rem;
+        }
+
+        .post-title {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.3;
+        }
+
+        .post-body {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #444;
+            margin-bottom: 2rem;
+        }
+
+        .comments-section {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #f1f3f4;
+        }
+
+        .comment-form {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .comment-input {
+            flex: 1;
+            padding: 1rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+
+        .comment-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .comment {
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+                gap: 2rem;
+            }
+
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .search-box {
+                max-width: 250px;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .main-content, .sidebar-widget {
+                padding: 1.5rem;
+            }
+
+            .modal-content {
+                margin: 5% 1rem;
+                width: calc(100% - 2rem);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <i class="fas fa-blog"></i> BlogHub
+            </div>
+            <div class="header-actions">
+                <div class="search-box">
+                    <input type="text" placeholder="Search posts..." id="searchInput" onkeyup="searchPosts()">
+                    <button class="search-btn"><i class="fas fa-search"></i></button>
+                </div>
+                <a href="#" class="btn btn-secondary" onclick="openEditor()">
+                    <i class="fas fa-plus"></i> New Post
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-header">
+                <h1 class="page-title">Discover Amazing Stories</h1>
+                <div class="categories">
+                    <a href="#" class="category-tag" onclick="filterCategory('all')">All</a>
+                    <a href="#" class="category-tag" onclick="filterCategory('tech')">Technology</a>
+                    <a href="#" class="category-tag" onclick="filterCategory('lifestyle')">Lifestyle</a>
+                    <a href="#" class="category-tag" onclick="filterCategory('business')">Business</a>
+                    <a href="#" class="category-tag" onclick="filterCategory('travel')">Travel</a>
+                </div>
+            </div>
+
+            <div class="posts-grid" id="postsGrid">
+                <!-- Posts will be populated by JavaScript -->
+            </div>
+        </main>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-widget">
+                <h3 class="widget-title">
+                    <i class="fas fa-fire"></i> Popular Posts
+                </h3>
+                <div class="recent-posts" id="popularPosts">
+                    <!-- Popular posts populated by JS -->
+                </div>
+            </div>
+
+            <div class="sidebar-widget">
+                <h3 class="widget-title">
+                    <i class="fas fa-users"></i> Top Authors
+                </h3>
+                <ul style="list-style: none;">
+                    <li style="margin-bottom: 1rem;">
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <div style="width: 40px; height: 40px; border-radius: 50%; background: #667eea; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold;">JD</div>
+                            <div>John Doe <span style="color: #999; font-size: 0.9rem;">25 posts</span></div>
+                        </div>
+                    </li>
+                    <li style="margin-bottom: 1rem;">
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <div style="width: 40px; height: 40px; border-radius: 50%; background: #ff6b6b; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold;">SJ</div>
+                            <div>Sarah Johnson <span style="color: #999; font-size: 0.9rem;">18 posts</span></div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Create/Edit Post Modal -->
+    <div id="editorModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Create New Post</h2>
+                <button class="close-modal" onclick="closeEditor()">&times;</button>
+            </div>
+            <div class="editor-container">
+                <div class="editor-toolbar">
+                    <button class="editor-btn" onclick="formatText('bold')"><i class="fas fa-bold"></i></button>
+                    <button class="editor-btn" onclick="formatText('italic')"><i class="fas fa-italic"></i></button>
+                    <button class="editor-btn" onclick="formatText('underline')"><i class="fas fa-underline"></i></button>
+                    <button class="editor-btn" onclick="insertLink()">🔗 Link</button>
+                    <select class="editor-btn" onchange="formatText('formatBlock', this.value)" style="padding: 0.5rem;">
+                        <option>Normal</option>
+                        <option value="h1">Heading 1</option>
+                        <option value="h2">Heading 2</option>
+                        <option value="h3">Heading 3</option>
+                    </select>
+                </div>
+                <textarea id="postEditor" placeholder="Start writing your blog post..."></textarea>
+                <div style="margin-top: 1rem;">
+                    <label>Category:</label>
+                    <select id="postCategory" style="margin-left: 1rem; padding: 0.5rem; border-radius: 5px; border: 1px solid #e0e0e0;">
+                        <option value="tech">Technology</option>
+                        <option value="lifestyle">Lifestyle</option>
+                        <option value="business">Business</option>
+                        <option value="travel">Travel</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeEditor()">Cancel</button>
+                <button class="btn btn-primary" onclick="savePost()">Publish Post</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Post View Modal -->
+    <div id="postModal" class="modal post-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close-modal" onclick="closePostModal()">&times;</button>
+            </div>
+            <div class="post-content" id="postContent">
+                <!-- Post content loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample blog posts data
+        let posts = [
+            {
+                id: 1,
+                title: "The Future of Artificial Intelligence in 2026",
+                excerpt: "AI is transforming every industry. From healthcare to transportation, discover how intelligent systems are reshaping our world.",
+                content: "Artificial Intelligence has evolved from science fiction to everyday reality. In 2026, AI systems are not just assistants but true collaborators in human endeavors. President Trump's recent executive orders have accelerated AI development, positioning the US as the global leader in this transformative technology.",
+                author: "John Doe",
+                avatar: "JD",
+                date: "Jan 1, 2026",
+                category: "tech",
+                image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800&h=400&fit=crop",
+                views: 1250,
+                comments: 23
+            },
+            {
+                id: 2,
+                title: "10 Productivity Hacks for Remote Developers",
+                excerpt: "Working from home requires discipline. Here are proven strategies to maximize your coding efficiency.",
+                content: "Remote development presents unique challenges and opportunities. This comprehensive guide covers time management, workspace optimization, and collaboration tools that every frontend developer needs.",
+                author: "Sarah Johnson",
+                avatar: "SJ",
+                date: "Dec 28, 2025",
+                category: "tech",
+                image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&h=400&fit=crop",
+                views: 890,
+                comments: 15
+            },
+            {
+                id: 3,
+                title: "Minimalist Living: Less is More",
+                excerpt: "Discover the freedom of owning less and living intentionally in a consumer-driven world.",
+                content: "Minimalism isn't about deprivation—it's about intention. Learn practical steps to declutter your life and focus on what truly matters.",
+                author: "Emma Wilson",
+                avatar: "EW",
+                date: "Dec 25, 2025",
+                category: "lifestyle",
+                image: "https://images.unsplash.com/photo-1558618048-7f896d4a9a5e?w=800&h=400&fit=crop",
+                views: 670,
+                comments: 12
+            }
+        ];
+
+        let filteredPosts = [...posts];
+        let editingPostId = null;
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            renderPosts();
+            renderPopularPosts();
+        });
+
+        function renderPosts(postsToRender = filteredPosts) {
+            const grid = document.getElementById('postsGrid');
+            grid.innerHTML = postsToRender.map(post => `
+                <div class="post-card" onclick="openPost(${post.id})">
+                    <div class="post-header">
+                        <div class="post-avatar">${post.avatar}</div>
+                        <div class="post-meta">
+                            <h3>${post.title}</h3>
+                            <div class="post-author">${post.author}</div>
+                            <div class="post-date">${post.date} • ${post.category.toUpperCase()}</div>
+                        </div>
+                    </div>
+                    <p class="post-excerpt">${post.excerpt}</p>
+                    <div class="post-footer">
+                        <a href="#" class="read-more">Read full story</a>
+                        <div class="post-stats">
+                            <span><i class="fas fa-eye"></i> ${post.views}</span>
+                            <span><i class="fas fa-comment"></i> ${post.comments}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderPopularPosts() {
+            const popular = posts.slice(0, 3);
+            document.getElementById('popularPosts').innerHTML = popular.map(post => `
+                <div class="recent-post" onclick="openPost(${post.id})">
+                    <img src="${post.image}" alt="${post.title}" class="recent-thumb">
+                    <div class="recent-info">
+                        <h4>${post.title}</h4>
+                        <div style="color: #999; font-size: 0.9rem;">${post.views} views</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function searchPosts() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            filteredPosts = posts.filter(post => 
+                post.title.toLowerCase().includes(query) ||
+                post.content.toLowerCase().includes(query) ||
+                post.author.toLowerCase().includes(query)
+            );
+            renderPosts();
+        }
+
+        function filterCategory(category) {
+            if (category === 'all') {
+                filteredPosts = [...posts];
+            } else {
+                filteredPosts = posts.filter(post => post.category === category);
+            }
+            renderPosts();
+        }
+
+        // Editor functions
+        function openEditor(postId = null) {
+            const modal = document.getElementById('editorModal');
+            const editor = document.getElementById('postEditor');
+            const title = document.getElementById('modalTitle');
+            
+            editingPostId = postId;
+            
+            if (postId) {
+                const post = posts.find(p => p.id === postId);
+                editor.innerHTML = post.content;
+                document.getElementById('postCategory').value = post.category;
+                title.textContent = 'Edit Post';
+            } else {
+                editor.innerHTML = '';
+                title.textContent = 'Create New Post';
+            }
+            
+            modal.style.display = 'block';
+            editor.focus();
+        }
+
+        function closeEditor() {
+            document.getElementById('editorModal').style.display = 'none';
+            editingPostId = null;
+        }
+
+        function formatText(command, value = null) {
+            document.execCommand(command, false, value);
+        }
+
+        function insertLink() {
+            const url = prompt('Enter URL:');
+            if (url) {
+                document.execCommand('createLink', false, url);
+            }
+        }
+
+        function savePost() {
+            const editor = document.getElementById('postEditor');
+            const category = document.getElementById('postCategory').value;
+            const content = editor.innerHTML;
+
+            if (!content.trim()) {
+                alert('Please write something!');
+                return;
+            }
+
+            if (editingPostId) {
+                // Update existing post
+                const post = posts.find(p => p.id === editingPostId);
+                post.content = content;
+                post.category = category;
+            } else {
+                // Create new post
+                const newPost = {
+                    id: Date.now(),
+                    title: content.split('</h1>')[0].replace(/<[^>]*>/g, '').substring(0, 60) + '...',
+                    excerpt: content.replace(/<[^>]*>/g, '').substring(0, 150) + '...',
+                    content: content,
+                    author: 'You',
+                    avatar: 'YU',
+                    date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+                    category: category,
+                    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=400&fit=crop',
+                    views: 0,
+                    comments: 0
+                };
+                posts.unshift(newPost);
+            }
+
+            renderPosts();
+            renderPopularPosts();
+            closeEditor();
+        }
+
+        // Post viewer
+        function openPost(postId) {
+            const post = posts.find(p => p.id === postId);
+            if (!post) return;
+
+            document.getElementById('postContent').innerHTML = `
+                <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); height: 300px; border-radius: 20px; margin-bottom: 2rem; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; text-align: center; padding: 2rem;">
+                    ${post.image ? `<img src="${post.image}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 20px; z-index: -1;">` : ''}
+                    <div style="position: relative; z-index: 1;">
+                        <div style="font-size: 3rem; font-weight: bold; margin-bottom: 1rem;">${post.title}</div>
+                        <div style="font-size: 1.2rem; opacity: 0.9;">${post.author} • ${post.date}</div>
+                    </div>
+                </div>
+                <div class="post-body" style="max-width: 800px; margin: 0 auto;">${post.content}</div>
+                
+                <div class="comments-section">
+                    <h3 style="color: #333; margin-bottom: 1.5rem;"><i class="fas fa-comments"></i> Comments (${post.comments})</h3>
+                    <div class="comment-form">
+                        <input type="text" class="comment-input" placeholder="Add a comment..." id="newComment">
+                        <button class="btn btn-primary" onclick="addComment(${post.id})" style="padding: 1rem 2rem;">
+                            <i class="fas fa-paper-plane"></i> Post
+                        </button>
+                    </div>
+                    <div class="comment-list" id="commentList-${post.id}">
+                        <div class="comment">
+                            <div style="font-weight: 500; margin-bottom: 0.3rem;">Alex • 2 hours ago</div>
+                            <div>Great article! Very insightful perspective on AI development.</div>
+                        </div>
+                        <div class="comment">
+                            <div style="font-weight: 500; margin-bottom: 0.3rem;">Maria • 5 hours ago</div>
+                            <div>Thanks for sharing these productivity tips. Already implementing #3!</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('postModal').style.display = 'block';
+        }
+
+        function closePostModal() {
+            document.getElementById('postModal').style.display = 'none';
+        }
+
+        function addComment(postId) {
+            const input = document.getElementById(`newComment`);
+            const commentList = document.getElementById(`commentList-${postId}`);
+            
+            if (input.value.trim()) {
+                const comment = document.createElement('div');
+                comment.className = 'comment';
+                comment.innerHTML = `
+                    <div style="font-weight: 500; margin-bottom: 0.3rem;">You • just now</div>
+                    <div>${input.value}</div>
+                `;
+                commentList.appendChild(comment);
+                input.value = '';
+                
+                // Update comment count
+                const post = posts.find(p => p.id === postId);
+                post.comments++;
+                renderPosts();
+            }
+        }
+
+        // Modal event listeners
+        window.onclick = function(event) {
+            const editorModal = document.getElementById('editorModal');
+            const postModal = document.getElementById('postModal');
+            
+            if (event.target === editorModal) closeEditor();
+            if (event.target === postModal) closePostModal();
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeEditor();
+                closePostModal();
+            }
+        });
+    </script>
+</body>
+</html>
